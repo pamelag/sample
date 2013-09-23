@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" href="stylesheets/bootstrap.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+
+
+            <a href="#" class="brand"><%=name%></a>
+
+
+
+        </div>
+    </div>
+</div>
+<section>
+    <div class="container login">
+        <div class="row ">
+            <div class="center span4 well">
+                <legend>Please Sign In</legend>
+
+                <form action='/login' method="POST">
+                    <fieldset>
+
+                        <div class="control-group">
+
+                            <label class="control-label" for="username">Username</label>
+                            <div class="controls">
+                                <input type="text" id="username" name="username" placeholder="" class="input-xlarge">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+
+                            <label class="control-label" for="password">Password</label>
+                            <div class="controls">
+                                <input type="password" id="password" name="password" placeholder="" class="input-xlarge">
+                            </div>
+                        </div>
+
+
+                        <div class="control-group">
+
+                            <div class="controls">
+                                <button class="btn btn-success">Login</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+</body>
+</html>
