@@ -28,6 +28,10 @@ app.post('/login', function(req, res, next) {
     res.render('workspace');
 });
 
+app.get('/tokbox', function(req, res, next) {
+    res.render('tok');
+});
+
 app.get('/orders', function(req,res, next) {
     res.json({"project":"demo","newOrders":"91", "approvedOrders":"1", "pendingOrders":"123"});
 });

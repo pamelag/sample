@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<script src="https://www.tokbox.com/webrtc/v2.0/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+<body>
+<div id="publisher"></div>
+
+<button onclick="sendSignal()"></button>
+</body>
+<script type="text/javascript" charset="utf-8">
+    var apiKey    = "36756162";
+    var sessionId = "2_MX4zNjc1NjE2Mn5-TW9uIE9jdCAxNCAwMjoxMjo1NSBQRFQgMjAxM34wLjk0Nzk5Nzl-";
+    var token     = "T1==cGFydG5lcl9pZD0zNjc1NjE2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz0wN2MzM2E3N2I0NGIyMjAwMmVlOTZhNzQ0ZWVlMjIyODJmNTYxMGM4OnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9Ml9NWDR6TmpjMU5qRTJNbjUtVFc5dUlFOWpkQ0F4TkNBd01qb3hNam8xTlNCUVJGUWdNakF4TTM0d0xqazBOems1TnpsLSZjcmVhdGVfdGltZT0xMzgxNzQyMDUyJm5vbmNlPTAuNTI0MjQ5Mjk5Nzk0MzA0MSZleHBpcmVfdGltZT0xMzg0MzM0MDUwJmNvbm5lY3Rpb25fZGF0YT0=";
+
+    var sendSignal = function() {
+        session.signal({
+            type: "alert",
+            data: {
+                message: "hello there"
+            }
+        });
+    };
+    var session = TB.initSession(sessionId);
+
+    var subscribeToStreams = function(streams) {
+        for (var i=0; i < streams.length; i++) {
+            var stream = streams[i];
+            if (stream.connection.connectionId != session.connection.connectionId)
+                session.subscribe(streams[i], null, {
+                    width: 200,
+                    height: 200
+                });
+        }
+    };
+
+    session.on({
+        sessionConnected: function(event){
+            subscribeToStreams(event.streams);
+
+            session.publish("publisher", {
+                publishVideo:true,
+                width: 200,
+                height: 200
+            });
+        },
+        streamCreated: function(event){
+            subscribeToStreams(event.streams);
+        }
+    });
+
+    session.on("signal:alert", function(event) {
+        alert(event.data.message);
+    });
+
+    session.connect(apiKey, token);
+
+
+</script>
+</html>

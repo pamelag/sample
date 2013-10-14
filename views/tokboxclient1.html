@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" ></script>
+</head>
+<body>
+<script type="text/javascript">
+    var apiKey    = "36756162";
+    var sessionID = "2_MX4zNjc1NjE2Mn5-TW9uIE9jdCAxNCAwMjoxMjo1NSBQRFQgMjAxM34wLjk0Nzk5Nzl-";
+    var token     = "T1==cGFydG5lcl9pZD0zNjc1NjE2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz0wN2MzM2E3N2I0NGIyMjAwMmVlOTZhNzQ0ZWVlMjIyODJmNTYxMGM4OnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9Ml9NWDR6TmpjMU5qRTJNbjUtVFc5dUlFOWpkQ0F4TkNBd01qb3hNam8xTlNCUVJGUWdNakF4TTM0d0xqazBOems1TnpsLSZjcmVhdGVfdGltZT0xMzgxNzQyMDUyJm5vbmNlPTAuNTI0MjQ5Mjk5Nzk0MzA0MSZleHBpcmVfdGltZT0xMzg0MzM0MDUwJmNvbm5lY3Rpb25fZGF0YT0=";
+    var session = TB.initSession("2_MX4zNjc1NjE2Mn5-TW9uIE9jdCAxNCAwMjoxMjo1NSBQRFQgMjAxM34wLjk0Nzk5Nzl-");
+    var publisher;
+    var replacementElementId = document.getElementById('localVideo');
+
+    session.connect(apiKey, token);
+
+    session.addEventListener("sessionConnected", sessionConnectHandler);
+    session.addEventListener("streamCreated", streamCreatedHandler);
+
+    if (TB.checkSystemRequirements() == 1) {
+        // Replace sessionID with your own values:
+        session = TB.initSession(sessionID);
+        TB.addEventListener("exception", exceptionHandler);
+
+        session.addEventListener("sessionConnected",
+                sessionConnectHandler);
+
+        session.addEventListener("streamCreated",
+                streamCreatedHandler);
+
+        session.addEventListener("streamDestroyed",
+                streamDestroyedHandler);
+
+        session.connect(apiKey, token);
+        //if (session.capabilities.publish == 1) {
+            // Replace apiKey and replacementElementId with your own values:
+            publisher = TB.initPublisher(apiKey, replacementElementId);
+        //} else {
+        //    alert("You cannot publish an audio-video stream.")
+        //}
+    } else {
+        TB.log("The client does not support WebRTC.");
+    }
+
+    function sessionConnectHandler(event) {
+        //if (publisher) {
+            session.publish(1);
+        //}
+    }
+
+    function subscribeToStreams(streams) {
+        for (var i = 0; i < streams.length; i++) {
+            var stream = streams[i];
+            if (stream.connection.connectionId != session.connection.connectionId) {
+                session.subscribe(stream);
+            }
+        }
+    }
+
+    function streamCreatedHandler(event) {
+        for (var i = 0; i < event.streams.length; i++) {
+            var stream = event.streams[i];
+            if (stream.connection == session.connection) {
+                // This Stream object is your own published stream
+            }
+        }
+    }
+
+    function streamDestroyedHandler(event) {
+        for (var i = 0; i < event.streams.length; i++) {
+            var stream = event.streams[i];
+            if (stream.connection == session.connection) {
+                alert("Publisher stopped streaming. Reason: "
+                        + event.reason)
+            }
+        }
+    }
+
+    function exceptionHandler(event) {
+        // These are all connection-related events:
+        if (event.code === 1006 || event.code === 1008 || event.code === 1014) {
+            // Connection failed
+        }
+    }
+</script>
+<div id='videos'>
+    <video id='localVideo' autoplay muted></video>
+    <video id='remoteVideo' autoplay></video>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Page Title</title>
+    <script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" ></script>
+</head>
+
+<body>
+
+<script type="text/javascript">
+  var apiKey    = "36756162";
+  var sessionId = "2_MX4zNjc1NjE2Mn5-TW9uIE9jdCAxNCAwMjoxMjo1NSBQRFQgMjAxM34wLjk0Nzk5Nzl-";
+  var token     = "T1==cGFydG5lcl9pZD0zNjc1NjE2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz0wN2MzM2E3N2I0NGIyMjAwMmVlOTZhNzQ0ZWVlMjIyODJmNTYxMGM4OnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9Ml9NWDR6TmpjMU5qRTJNbjUtVFc5dUlFOWpkQ0F4TkNBd01qb3hNam8xTlNCUVJGUWdNakF4TTM0d0xqazBOems1TnpsLSZjcmVhdGVfdGltZT0xMzgxNzQyMDUyJm5vbmNlPTAuNTI0MjQ5Mjk5Nzk0MzA0MSZleHBpcmVfdGltZT0xMzg0MzM0MDUwJmNvbm5lY3Rpb25fZGF0YT0=";
+ 
+  function sessionConnectedHandler (event) {
+     session.publish( publisher );
+     subscribeToStreams(event.streams);
+  }
+  function subscribeToStreams(streams) {
+    for (var i = 0; i < streams.length; i++) {
+        var stream = streams[i];
+        if (stream.connection.connectionId
+               != session.connection.connectionId) {
+            session.subscribe(stream);
+        }
+    }
+  }
+  function streamCreatedHandler(event) {
+    subscribeToStreams(event.streams);
+  }
+ 
+  var publisher = TB.initPublisher(apiKey);
+  var session   = TB.initSession(sessionId);
+ 
+  session.connect(apiKey, token);
+  session.addEventListener("sessionConnected",
+                           sessionConnectedHandler);
+ 
+  session.addEventListener("streamCreated",
+                           streamCreatedHandler);
+</script>
+
+</body>
+</html>
